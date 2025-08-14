@@ -4,11 +4,12 @@ namespace App\Models;
 
 use App\Traits\HasAlphanumericId;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Comunidade extends Model
 {
-    use HasAlphanumericId;
-    
+    use HasAlphanumericId, SoftDeletes;
+
     protected $table = 'comunidades';
 
     protected $fillable = ['nome'];

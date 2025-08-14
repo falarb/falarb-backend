@@ -8,16 +8,16 @@ use Illuminate\Http\Request;
 
 class AdministradorController extends Controller
 {
-    public function criar(Request $request)
-    {
-        $administrador = Administrador::create($request->all());
-        return response()->json($administrador, 201);
-    }
-
     public function listar()
     {
         $administradores = Administrador::all();
         return response()->json($administradores, 200);
+    }
+
+    public function criar(Request $request)
+    {
+        $administrador = Administrador::create($request->all());
+        return response()->json($administrador, 201);
     }
 
     public function visualizar($id)

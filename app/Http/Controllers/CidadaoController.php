@@ -5,36 +5,27 @@ namespace App\Http\Controllers;
 use App\Http\Validation\CidadaoValidation;
 use App\Mail\tokenValidaEmail;
 use App\Models\Cidadao;
+use App\Models\Solicitacao;
 use Illuminate\Http\Request;
 use Mail;
 
 class CidadaoController extends Controller
 {
-    public function geraToken()
-    {
-        $token = str_pad(rand(0, 9999), 4, '0', STR_PAD_LEFT);
 
-        return $token;
-    }
-    public function enviaToken($id)
+    public function listar()
     {
-        // Verifica se o cidadão existe na base
-        $cidadao = Cidadao::findOrFail($id);
+        $cidadaos = Cidadao::with(['comunidade'])->get();
 
-        // Verifica se o cidadão está bloqueado
-        if ($cidadao->bloqueado) {
-            return response()->json(['message' => 'Cidadão bloqueado'], 403);
+        // Para devolver a listagem com o total de solicitações feitas pelo usuário
+        if (request()->query('comTotalSolicitacoes')) {
+            foreach ($cidadaos as $cidadao) {
+                $totalSolicitacoes = Solicitacao::where('id_cidadao', $cidadao->id)
+                    ->count();
+                $cidadao->total_solicitacoes = $totalSolicitacoes;
+            }
         }
 
-        // Lógica para enviar o token de validação de e-mail
-        $token = $this->geraToken();
-        $cidadao->ultimo_codigo = $token;
-        $cidadao->codigo_enviado_em = now();
-        $cidadao->save();
-
-        Mail::to($cidadao->email)->send(new tokenValidaEmail($token));
-
-        return response()->json(['message' => 'Token enviado com sucesso'], 200);
+        return response()->json($cidadaos, 200);
     }
 
     public function criar(Request $request)
@@ -82,10 +73,24 @@ class CidadaoController extends Controller
         return response()->json($cidadao, 200);
     }
 
-    public function listar()
+    public function enviaToken($id)
     {
-        $cidadaos = Cidadao::all();
-        return response()->json($cidadaos, 200);
+        $cidadao = Cidadao::findOrFail($id);
+
+        // Verifica se o cidadão está bloqueado
+        if ($cidadao->bloqueado) {
+            return response()->json(['message' => 'Cidadão bloqueado'], 403);
+        }
+
+        // Lógica para enviar o token de validação de e-mail
+        $token = geraToken();
+        $cidadao->ultimo_codigo = $token;
+        $cidadao->codigo_enviado_em = now();
+        $cidadao->save();
+
+        Mail::to($cidadao->email)->send(new tokenValidaEmail($token));
+
+        return response()->json(['message' => 'Token enviado com sucesso'], 200);
     }
 
     public function verificaEmail(Request $request, $id)

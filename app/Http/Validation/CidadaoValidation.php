@@ -37,18 +37,17 @@ class CidadaoValidation
     public static function validarAtualizacao($data, $cidadao)
     {
         return validator($data, [
-            'nome' => 'required|string|max:60',
-            'email' => 'required|email|unique:cidadaos,email,' . $cidadao->id,
-            'cpf' => 'required|string|cpf|unique:cidadaos,cpf,' . $cidadao->id,
-            'telefone' => 'nullable|string|max:15|unique:cidadaos,telefone,' . $cidadao->id,
-            'id_comunidade' => 'required|exists:comunidades,id',
-            'email_verificado' => 'boolean',
-            'ultimo_codigo' => 'nullable|string',
-            'codigo_enviado_em' => 'nullable|date',
-            'bloqueado' => 'boolean',
-            'bloqueado_por' => 'nullable|string',
-            'bloqueado_em' => 'nullable|date',
-            'criado_em' => 'required|date',
+            'nome' => 'sometimes|required|string|max:60',
+            'email' => 'sometimes|required|email|unique:cidadaos,email,' . $cidadao->id,
+            'cpf' => 'sometimes|required|string|cpf|unique:cidadaos,cpf,' . $cidadao->id,
+            'telefone' => 'sometimes|nullable|string|max:15|unique:cidadaos,telefone,' . $cidadao->id,
+            'id_comunidade' => 'sometimes|required|exists:comunidades,id',
+            'email_verificado' => 'sometimes|boolean',
+            'ultimo_codigo' => 'sometimes|nullable|string',
+            'codigo_enviado_em' => 'sometimes|nullable|date',
+            'bloqueado' => 'sometimes|boolean',
+            'bloqueado_por' => 'sometimes|nullable|string',
+            'bloqueado_em' => 'sometimes|nullable|date',
         ], self::mensagens());
     }
 }

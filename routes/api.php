@@ -36,8 +36,8 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::prefix('comunidades')->group(function () {
         Route::get('/{id}', [ComunidadeController::class, 'visualizar']);
         Route::post('/', [ComunidadeController::class, 'criar']);
-        Route::put('/{id}', [ComunidadeController::class, 'update']);
-        Route::delete('/{id}', [ComunidadeController::class, 'destroy']);
+        Route::put('/{id}', [ComunidadeController::class, 'atualizar']);
+        Route::delete('/{id}', [ComunidadeController::class, 'excluir']);
     });
 
     // Cidadãos

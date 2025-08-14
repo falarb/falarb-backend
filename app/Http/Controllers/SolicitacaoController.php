@@ -45,7 +45,7 @@ class SolicitacaoController extends Controller
     {
         $solicitacao = Solicitacao::with(['cidadao', 'comunidade', 'categoria'])
             ->findOrFail($id);
-            
+
         return response()->json($solicitacao, 200);
     }
 
