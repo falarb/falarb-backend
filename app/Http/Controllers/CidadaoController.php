@@ -118,8 +118,12 @@ class CidadaoController extends Controller
             return response()->json(['message' => 'Parâmetro email é obrigatório'], 422);
         }
 
-        $existe = Cidadao::where('email', $email)->exists();
+        $cidadao = Cidadao::where('email', $email)->first();
 
-        return response()->json(['existe' => $existe], 200);
+        if ($cidadao) {
+            return response()->json(['id' => $cidadao->id], 200);
+        }
+
+        return response()->json(['id' => null], 200);
     }
 }
