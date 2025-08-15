@@ -17,14 +17,10 @@ return Application::configure(basePath: dirname(__DIR__))
     ->withExceptions(function (Exceptions $exceptions): void {
         // Handler para erros de autenticação
         $exceptions->render(function (\Illuminate\Auth\AuthenticationException $e, $request) {
-            if ($request->expectsJson() || $request->is('api/*')) {
-                return response()->json([
-                    'erro' => 'Não autorizado',
-                    'message' => 'Token de acesso inválido ou expirado. Faça login novamente.',
-                    'status' => 401
-                ], 401);
-            }
-
-            return redirect()->guest(route('login'));
+            return response()->json([
+                'erro' => 'Não autorizado',
+                'message' => 'Token de acesso inválido ou expirado. Faça login novamente.',
+                'status' => 401
+            ], 401);
         });
     })->create();

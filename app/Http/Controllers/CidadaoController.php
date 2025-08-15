@@ -109,4 +109,17 @@ class CidadaoController extends Controller
 
         return response()->json(['message' => 'Verificação de e-mail realizada com sucesso'], 200);
     }
+
+    public function emailExiste(Request $request)
+    {
+        $email = $request->query('email');
+
+        if (!$email) {
+            return response()->json(['message' => 'Parâmetro email é obrigatório'], 422);
+        }
+
+        $existe = Cidadao::where('email', $email)->exists();
+
+        return response()->json(['existe' => $existe], 200);
+    }
 }

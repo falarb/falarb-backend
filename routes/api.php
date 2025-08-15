@@ -15,6 +15,31 @@ Route::post('/login', [AuthController::class, 'loginAdministrador']);
 Route::post('/esqueci-senha', [AuthController::class, 'esqueciSenha']);
 Route::post('/admin', [AdministradorController::class, 'criar']);
 
+// ---> ROTAS PUBLICAS <---
+// Comunidades
+Route::prefix('comunidades')->group(function () {
+    Route::get('/', [ComunidadeController::class, 'listar']);
+});
+
+// Cidadãos
+Route::prefix('cidadaos')->group(function () {
+    Route::post('/', [CidadaoController::class, 'criar']);
+    Route::post('/envia-token/{id}', [CidadaoController::class, 'enviaToken']);
+    Route::post('/verifica-email/{id}', [CidadaoController::class, 'verificaEmail']);
+    Route::get('/email-existe', [CidadaoController::class, 'emailExiste']);
+});
+
+// Solicitações
+Route::prefix('solicitacoes')->group(function () {
+    Route::post('/', [SolicitacaoController::class, 'criar']);
+    Route::get('/busca-por-token/{token}', [SolicitacaoController::class, 'buscaPorToken']);
+});
+
+// Categorias
+Route::prefix('categorias')->group(function () {
+    Route::get('/', [CategoriaController::class, 'listar']);
+});
+
 // ---> ROTAS PROTEGIDAS <---
 Route::middleware(['auth:sanctum'])->group(function () {
     // Administradores
@@ -71,28 +96,4 @@ Route::middleware(['auth:sanctum'])->group(function () {
 
     // Relatórios
     Route::get('/relatorio', [SolicitacaoController::class, 'relatorioPorStatus']);
-});
-
-// ---> ROTAS PUBLICAS <---
-// Comunidades
-Route::prefix('comunidades')->group(function () {
-    Route::get('/', [ComunidadeController::class, 'listar']);
-});
-
-// Cidadãos
-Route::prefix('cidadaos')->group(function () {
-    Route::post('/', [CidadaoController::class, 'criar']);
-    Route::post('/envia-token/{id}', [CidadaoController::class, 'enviaToken']);
-    Route::post('/verifica-email/{id}', [CidadaoController::class, 'verificaEmail']);
-});
-
-// Solicitações
-Route::prefix('solicitacoes')->group(function () {
-    Route::post('/', [SolicitacaoController::class, 'criar']);
-    Route::get('/busca-por-token/{token}', [SolicitacaoController::class, 'buscaPorToken']);
-});
-
-// Categorias
-Route::prefix('categorias')->group(function () {
-    Route::get('/', [CategoriaController::class, 'listar']);
 });
