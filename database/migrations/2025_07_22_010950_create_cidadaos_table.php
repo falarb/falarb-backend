@@ -22,8 +22,6 @@ return new class extends Migration {
             $table->boolean('bloqueado')->default(false);
             $table->timestamp('bloqueado_em')->nullable();
             $table->string('bloqueado_por')->nullable();
-            $table->string('id_comunidade', 24);
-            $table->foreign('id_comunidade')->references('id')->on('comunidades')->onDelete('cascade');
             $table->softDeletes();
             $table->timestamps();
         });

@@ -15,11 +15,6 @@ class Comunidade extends Model
     protected $fillable = ['nome'];
 
     // Relacionamentos
-    public function cidadaos()
-    {
-        return $this->hasMany(Cidadao::class, 'id_comunidade');
-    }
-
     public function solicitacoes()
     {
         return $this->hasMany(Solicitacao::class, 'id_comunidade');

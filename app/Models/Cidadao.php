@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class Cidadao extends Model
 {
     use HasAlphanumericId, SoftDeletes;
-    
+
     protected $table = 'cidadaos';
 
     protected $fillable = [
@@ -22,8 +22,7 @@ class Cidadao extends Model
         'codigo_enviado_em',
         'bloqueado',
         'bloqueado_em',
-        'bloqueado_por',
-        'id_comunidade'
+        'bloqueado_por'
     ];
 
     protected $casts = [
@@ -34,11 +33,6 @@ class Cidadao extends Model
     ];
 
     // Relacionamentos
-    public function comunidade()
-    {
-        return $this->belongsTo(Comunidade::class, 'id_comunidade');
-    }
-
     public function solicitacoes()
     {
         return $this->hasMany(Solicitacao::class, 'id_cidadao');

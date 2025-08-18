@@ -16,8 +16,6 @@ class CidadaoValidation
             'cpf.cpf' => 'O CPF deve ser válido.',
             'cpf.unique' => 'Este CPF já está em uso.',
             'telefone.unique' => 'Este telefone já está em uso.',
-            'id_comunidade.required' => 'A comunidade é obrigatória.',
-            'id_comunidade.exists' => 'A comunidade selecionada não existe.',
         ];
     }
 
@@ -29,7 +27,6 @@ class CidadaoValidation
             'email' => 'required|email|unique:cidadaos,email',
             'cpf' => 'required|string|max:11|unique:cidadaos,cpf',
             'telefone' => 'nullable|string|max:15|unique:cidadaos,telefone',
-            'id_comunidade' => 'required|exists:comunidades,id',
         ], self::mensagens());
     }
 
@@ -41,7 +38,6 @@ class CidadaoValidation
             'email' => 'sometimes|required|email|unique:cidadaos,email,' . $cidadao->id,
             'cpf' => 'sometimes|required|string|cpf|unique:cidadaos,cpf,' . $cidadao->id,
             'telefone' => 'sometimes|nullable|string|max:15|unique:cidadaos,telefone,' . $cidadao->id,
-            'id_comunidade' => 'sometimes|required|exists:comunidades,id',
             'email_verificado' => 'sometimes|boolean',
             'ultimo_codigo' => 'sometimes|nullable|string',
             'codigo_enviado_em' => 'sometimes|nullable|date',
