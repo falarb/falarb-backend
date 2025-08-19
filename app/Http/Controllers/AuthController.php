@@ -11,7 +11,6 @@ class AuthController extends Controller
     {
         $credentials = $request->only('email', 'senha');
 
-        // Transformar 'senha' em 'password' para o Auth::attempt
         $authCredentials = [
             'email' => $credentials['email'],
             'password' => $credentials['senha']

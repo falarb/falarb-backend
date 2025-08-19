@@ -13,9 +13,6 @@ return new class extends Migration {
         Schema::create('categorias', function (Blueprint $table) {
             $table->string('id', 24)->primary();
             $table->string('nome');
-            $table->string('criado_por');
-            $table->string('atualizado_por')->nullable();
-            $table->string('deletado_por')->nullable();
             $table->softDeletes();
             $table->timestamps();
         });

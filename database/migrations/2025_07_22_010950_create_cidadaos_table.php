@@ -14,7 +14,6 @@ return new class extends Migration {
             $table->string('id', 24)->primary();
             $table->string('nome');
             $table->string('email')->unique();
-            $table->boolean('email_verificado')->default(false);
             $table->string('telefone')->nullable();
             $table->string('cpf')->unique();
             $table->string('ultimo_codigo')->nullable();

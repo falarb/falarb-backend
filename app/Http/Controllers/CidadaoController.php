@@ -16,7 +16,7 @@ class CidadaoController extends Controller
     {
         $cidadaos = Cidadao::with(['comunidade'])->get();
 
-        // Para devolver a listagem com o total de solicitações feitas pelo usuário
+        // Total de solicitações feitas pelo usuário
         if (request()->query('comTotalSolicitacoes')) {
             foreach ($cidadaos as $cidadao) {
                 $totalSolicitacoes = Solicitacao::where('id_cidadao', $cidadao->id)
@@ -30,14 +30,11 @@ class CidadaoController extends Controller
 
     public function criar(Request $request)
     {
-        // Validação dos dados do cidadão
         $validatedData = CidadaoValidation::validarCriacao($request->all());
-
         if ($validatedData->fails()) {
             return response()->json($validatedData->errors(), 422);
         }
 
-        // Criação do cidadão
         $cidadao = Cidadao::create($validatedData->validated());
 
         return response()->json([
@@ -49,17 +46,13 @@ class CidadaoController extends Controller
 
     public function atualizar(Request $request, $id)
     {
-        // Busca o cidadão pelo ID
         $cidadao = Cidadao::findOrFail($id);
 
-        // Validação dos dados do cidadão
         $validatedData = CidadaoValidation::validarAtualizacao($request->all(), $cidadao);
-
         if ($validatedData->fails()) {
             return response()->json($validatedData->errors(), 422);
         }
 
-        // Atualiza os dados do cidadão
         $cidadao->update($validatedData->validated());
 
         return response()->json($cidadao, 200);
@@ -67,7 +60,6 @@ class CidadaoController extends Controller
 
     public function visualizar($id)
     {
-        // Busca o cidadão pelo ID
         $cidadao = Cidadao::findOrFail($id);
 
         return response()->json($cidadao, 200);
@@ -77,12 +69,10 @@ class CidadaoController extends Controller
     {
         $cidadao = Cidadao::findOrFail($id);
 
-        // Verifica se o cidadão está bloqueado
         if ($cidadao->bloqueado) {
             return response()->json(['message' => 'Cidadão bloqueado'], 403);
         }
 
-        // Lógica para enviar o token de validação de e-mail
         $token = geraToken();
         $cidadao->ultimo_codigo = $token;
         $cidadao->codigo_enviado_em = now();

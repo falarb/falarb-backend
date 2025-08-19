@@ -86,7 +86,9 @@ class SolicitacaoController extends Controller
 
     public function buscaPorToken($token)
     {
-        $solicitacao = Solicitacao::where('token_solicitacao', $token)->first();
+        $solicitacao = Solicitacao::where('token_solicitacao', $token)
+            ->with(['cidadao', 'comunidade', 'categoria'])
+            ->first();
 
         if (!$solicitacao) {
             return response()->json(['error' => 'Solicitação não encontrada.'], 404);

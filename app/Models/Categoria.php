@@ -9,14 +9,11 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class Categoria extends Model
 {
     use HasAlphanumericId, SoftDeletes;
-    
+
     protected $table = 'categorias';
 
     protected $fillable = [
-        'nome',
-        'criado_por',
-        'atualizado_por',
-        'deletado_por'
+        'nome'
     ];
 
     // Relacionamentos

@@ -10,17 +10,24 @@ class DashboardController extends Controller
 {
     public function indicadores()
     {
+        $idUsuario = request()->query('id_usuario');
+
+        $query = Solicitacao::query();
+        if ($idUsuario) {
+            $query->where('id_cidadao', $idUsuario);
+        }
+
         // Solicitações por status
         $solicitacoesPorStatus = [
-            'analise' => Solicitacao::where('status', 'analise')->count(),
-            'agendada' => Solicitacao::where('status', 'agendada')->count(),
-            'concluida' => Solicitacao::where('status', 'concluida')->count(),
-            'indeferida' => Solicitacao::where('status', 'indeferida')->count(),
-            'total' => Solicitacao::count(),
+            'analise' => $query->where('status', 'analise')->count(),
+            'agendada' => $query->where('status', 'agendada')->count(),
+            'concluida' => $query->where('status', 'concluida')->count(),
+            'indeferida' => $query->where('status', 'indeferida')->count(),
+            'total' => $query->count(),
         ];
 
         // 6 Categorias de solicitações mais requisitadas
-        $categoriasIds = Solicitacao::select('id_categoria')
+        $categoriasIds = $query->select('id_categoria')
             ->groupBy('id_categoria')
             ->orderByRaw('COUNT(*) DESC')
             ->limit(6)
