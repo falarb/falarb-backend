@@ -7,6 +7,7 @@ use App\Http\Controllers\CidadaoController;
 use App\Http\Controllers\ComunidadeController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ModificacaoController;
+use App\Http\Controllers\RelatorioController;
 use App\Http\Controllers\SolicitacaoController;
 use Illuminate\Support\Facades\Route;
 
@@ -95,5 +96,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
     });
 
     // Relatórios
-    Route::get('/relatorio', [SolicitacaoController::class, 'relatorioPorStatus']);
+    Route::prefix('relatorios')->group(function () {
+        Route::get('/geral', [RelatorioController::class, 'geral']);
+    });
 });

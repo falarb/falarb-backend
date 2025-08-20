@@ -14,7 +14,7 @@ class CidadaoController extends Controller
 
     public function listar()
     {
-        $cidadaos = Cidadao::with(['comunidade'])->get();
+        $cidadaos = Cidadao::all();
 
         // Total de solicitações feitas pelo usuário
         if (request()->query('comTotalSolicitacoes')) {
