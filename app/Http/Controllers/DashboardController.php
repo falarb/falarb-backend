@@ -19,11 +19,11 @@ class DashboardController extends Controller
 
         // Solicitações por status
         $solicitacoesPorStatus = [
+            'total' => $query->count(),
             'analise' => $query->where('status', 'analise')->count(),
             'agendada' => $query->where('status', 'agendada')->count(),
             'concluida' => $query->where('status', 'concluida')->count(),
             'indeferida' => $query->where('status', 'indeferida')->count(),
-            'total' => $query->count(),
         ];
 
         // 6 Categorias de solicitações mais requisitadas
