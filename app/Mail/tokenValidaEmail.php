@@ -14,10 +14,12 @@ class tokenValidaEmail extends Mailable
     use Queueable, SerializesModels;
 
     public string $token;
+    public string $userName;
 
-    public function __construct(string $token)
+    public function __construct(string $token, string $userName)
     {
         $this->token = $token;
+        $this->userName = $userName;
     }
 
     public function build()
@@ -26,6 +28,7 @@ class tokenValidaEmail extends Mailable
             ->subject('Valide seu e-mail')
             ->with([
                 'token' => $this->token,
+                'userName' => $this->userName,
             ]);
     }
 }

@@ -14,18 +14,33 @@ class CidadaoController extends Controller
 
     public function listar()
     {
-        $cidadaos = Cidadao::all();
+        $limite = (int) request()->query('limite', 10);
+        $pagina = (int) request()->query('pagina', 1);
+        $ordenar_por = request()->query('ordenar_por', 'id');
+        $ordenar_direcao = strtolower(request()->query('ordenar_direcao', 'asc'));
+        $offset = ($pagina - 1) * $limite;
 
-        // Total de solicitações feitas pelo usuário
+        $query = Cidadao::query();
+        $total = $query->count();
+
+        $cidadaos = $query->offset($offset)
+            ->limit($limite)
+            ->orderBy($ordenar_por, $ordenar_direcao)
+            ->get();
+
         if (request()->query('comTotalSolicitacoes')) {
+            $cidadaoIds = $cidadaos->pluck('id');
+            $totalSolicitacoesPorCidadao = Solicitacao::whereIn('id_cidadao', $cidadaoIds)
+                ->selectRaw('id_cidadao, count(*) as total')
+                ->groupBy('id_cidadao')
+                ->pluck('total', 'id_cidadao');
+
             foreach ($cidadaos as $cidadao) {
-                $totalSolicitacoes = Solicitacao::where('id_cidadao', $cidadao->id)
-                    ->count();
-                $cidadao->total_solicitacoes = $totalSolicitacoes;
+                $cidadao->total_solicitacoes = $totalSolicitacoesPorCidadao->get($cidadao->id, 0);
             }
         }
 
-        return response()->json($cidadaos, 200);
+        return respostaListagens($cidadaos, $total, $limite, $pagina);
     }
 
     public function criar(Request $request)
@@ -78,7 +93,7 @@ class CidadaoController extends Controller
         $cidadao->codigo_enviado_em = now();
         $cidadao->save();
 
-        Mail::to($cidadao->email)->send(new tokenValidaEmail($token));
+        Mail::to($cidadao->email)->send(new tokenValidaEmail($token, $cidadao->nome));
 
         return response()->json(['message' => 'Token enviado com sucesso'], 200);
     }

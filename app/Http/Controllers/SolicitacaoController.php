@@ -34,11 +34,21 @@ class SolicitacaoController extends Controller
 
     public function listar()
     {
-        // Solicitações junto com os cidadãos, comunidades e categorias
-        $solicitacoes = Solicitacao::with(['cidadao', 'comunidade', 'categoria'])
+        $limite = (int) request()->query('limite', 10);
+        $pagina = (int) request()->query('pagina', 1);
+        $ordenar_por = request()->query('ordenar_por', 'id');
+        $ordenar_direcao = strtolower(request()->query('ordenar_direcao', 'asc'));
+        $offset = ($pagina - 1) * $limite;
+
+        $query = Solicitacao::with(['cidadao', 'comunidade', 'categoria']);
+        $total = $query->count();
+
+        $solicitacoes = $query->offset($offset)
+            ->limit($limite)
+            ->orderBy($ordenar_por, $ordenar_direcao)
             ->get();
 
-        return response()->json($solicitacoes, 200);
+        return respostaListagens($solicitacoes, $total, $limite, $pagina);
     }
 
     public function visualizar($id)

@@ -9,36 +9,47 @@ class ComunidadeController extends Controller
 {
     public function listar()
     {
-        if (request()->query('comTotalSolicitacoes')) {
-            $comunidades = Comunidade::withCount([
-                'solicitacoes as total_solicitacoes',
-                'solicitacoes as concluidas_solicitacoes' => function ($q) {
-                    $q->where('status', 'concluida');
-                },
-                'solicitacoes as agendadas_solicitacoes' => function ($q) {
-                    $q->where('status', 'agendada');
-                },
-                'solicitacoes as em_espera_solicitacoes' => function ($q) {
-                    $q->where('status', 'analise');
-                },
-            ])->get();
+        $limite = (int) request()->query('limite', 10);
+        $pagina = (int) request()->query('pagina', 1);
+        $ordenar_por = request()->query('ordenar_por', 'id');
+        $ordenar_direcao = strtolower(request()->query('ordenar_direcao', 'asc'));
+        $offset = ($pagina - 1) * $limite;
 
-            // Formata resposta agrupando os counts
-            $comunidades->transform(function ($comunidade) {
-                $comunidade->solicitacoes_info = [
-                    'total' => $comunidade->total_solicitacoes,
-                    'concluidas' => $comunidade->concluidas_solicitacoes,
-                    'agendadas' => $comunidade->agendadas_solicitacoes,
-                    'em_espera' => $comunidade->em_espera_solicitacoes,
-                ];
+        $query = Comunidade::query();
+        $total = $query->count();
 
-                unset($comunidade->total_solicitacoes, $comunidade->concluidas_solicitacoes, $comunidade->agendadas_solicitacoes, $comunidade->em_espera_solicitacoes);
-                return $comunidade;
-            });
-        } else {
-            $comunidades = Comunidade::all();
-        }
-        return response()->json($comunidades, 200);
+
+        $query->withCount([
+            'solicitacoes as total_solicitacoes',
+            'solicitacoes as concluidas_solicitacoes' => function ($q) {
+                $q->where('status', 'concluida');
+            },
+            'solicitacoes as agendadas_solicitacoes' => function ($q) {
+                $q->where('status', 'agendada');
+            },
+            'solicitacoes as em_espera_solicitacoes' => function ($q) {
+                $q->where('status', 'analise');
+            },
+        ]);
+
+        $comunidades = $query->offset($offset)
+            ->limit($limite)
+            ->orderBy($ordenar_por, $ordenar_direcao)
+            ->get();
+
+        $comunidades->transform(function ($comunidade) {
+            $comunidade->solicitacoes_info = [
+                'total' => $comunidade->total_solicitacoes,
+                'concluidas' => $comunidade->concluidas_solicitacoes,
+                'agendadas' => $comunidade->agendadas_solicitacoes,
+                'em_espera' => $comunidade->em_espera_solicitacoes,
+            ];
+
+            unset($comunidade->total_solicitacoes, $comunidade->concluidas_solicitacoes, $comunidade->agendadas_solicitacoes, $comunidade->em_espera_solicitacoes);
+            return $comunidade;
+        });
+
+        return respostaListagens($comunidades, $total, $limite, $pagina);
     }
 
     public function visualizar($id)
@@ -56,7 +67,6 @@ class ComunidadeController extends Controller
             },
         ])->findOrFail($id);
 
-        // Formata resposta agrupando os counts
         $comunidade->solicitacoes_info = [
             'total' => $comunidade->total_solicitacoes,
             'concluidas' => $comunidade->concluidas_solicitacoes,

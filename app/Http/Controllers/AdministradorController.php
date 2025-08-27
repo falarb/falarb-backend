@@ -10,8 +10,21 @@ class AdministradorController extends Controller
 {
     public function listar()
     {
-        $administradores = Administrador::all();
-        return response()->json($administradores, 200);
+        $limite = (int) request()->query('limite', 10);
+        $pagina = (int) request()->query('pagina', 1);
+        $ordenar_por = request()->query('ordenar_por', 'id');
+        $ordenar_direcao = strtolower(request()->query('ordenar_direcao', 'asc'));
+        $offset = ($pagina - 1) * $limite;
+
+        $query = Administrador::query();
+        $total = $query->count();
+
+        $administradores = $query->offset($offset)
+            ->orderBy($ordenar_por, $ordenar_direcao)
+            ->limit($limite)
+            ->get();
+
+        return respostaListagens($administradores, $total, $limite, $pagina);
     }
 
     public function criar(Request $request)
@@ -34,7 +47,7 @@ class AdministradorController extends Controller
         if (isset($request->ativo) && !$request->ativo) {
             $administrador->tokens()->delete();
         }
-        
+
         $administrador->update($request->all());
         return response()->json($administrador, 200);
     }

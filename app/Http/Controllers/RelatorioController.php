@@ -3,8 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Solicitacao;
-use Illuminate\Http\Request;
-use Barryvdh\DomPDF\Facade\Pdf;
+use Spatie\Browsershot\Browsershot;
 
 class RelatorioController extends Controller
 {
@@ -29,7 +28,7 @@ class RelatorioController extends Controller
             $query->where('id_comunidade', $comunidade);
         }
 
-        $dataEscrita = 'Último ano'; // valor padrão
+        $dataEscrita = 'Último ano';
 
         if ($data == 'ultima_semana') {
             $query->where('created_at', '>=', now()->subWeek());
@@ -55,17 +54,29 @@ class RelatorioController extends Controller
             ->orderBy('created_at', 'desc')
             ->get();
 
-        // Gerar PDF usando a Facade correta
-        $pdf = Pdf::loadView('relatorios.geral', [
+        if ($dadosPdf->isEmpty()) {
+            return response()->json(['message' => 'Nenhum dado encontrado para os filtros aplicados.'], 404);
+        }
+
+        foreach ($dadosPdf as $dado) {
+            $dado->status_cor = pegaCorStatus($dado->status);
+            $dado->status = ucfirst($dado->status);
+        }
+
+        $pdf = Browsershot::html(view('relatorios.geral', [
             'dados' => $dadosPdf,
             'dataEscrita' => $dataEscrita,
             'categoria' => $categoria,
             'comunidade' => $comunidade,
-        ]);
-        
-        $pdf->setPaper('A4', 'landscape');
+        ])->render())
+            ->format('A4')
+            ->landscape()
+            ->margins(0, 0, 0, 0)
+            ->showBackground()
+            ->pdf();
 
-        // Retornar o PDF
-        return $pdf->stream('relatorio_geral.pdf');
+        return response($pdf)
+            ->header('Content-Type', 'application/pdf')
+            ->header('Content-Disposition', 'inline; filename="relatorio_geral.pdf"');
     }
 }
