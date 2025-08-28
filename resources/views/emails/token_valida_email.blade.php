@@ -12,7 +12,7 @@
             font-family: 'Lato', sans-serif;
         }
 
-        body {
+        .container {
             background-color: #F8F9FA;
             padding: 32px;
             text-align: center;
@@ -20,9 +20,10 @@
 
         header {
             margin-bottom: 32px;
+            text-align: center;
         }
 
-        main {
+        .main {
             background-color: #FFFFFF;
             padding: 64px 0;
             border-radius: 6px;
@@ -34,6 +35,11 @@
             font-weight: 900;
             letter-spacing: 0.4px;
             margin-bottom: 32px;
+            text-align: center;
+        }
+
+        p {
+            text-align: center;
         }
 
         .subtitle {
@@ -69,22 +75,21 @@
 </head>
 
 <body>
-    <header>
-        <img src="{{ asset('img/logo.png') }}" alt="Logo Solicita Aí">
-    </header>
-
-    <main>
-        <h1>Olá, {{$userName}}!</h1>
-
-        <p class="subtitle">Aqui está o token para você confirmar seu e-mail e seguir com o processo para criar uma
-            demanda: </p>
-
-        <div class="token-box">
-            <p>{{ $token }}</p>
+    <div class="container">
+        <header>
+            <img src="https://raw.githubusercontent.com/falarb/falarb-backend/main/public/img/logo.png"
+                alt="Logo Solicita Aí">
+        </header>
+        <div class="main">
+            <h1>Olá, {{$userName}}!</h1>
+            <p class="subtitle">Aqui está o token para você confirmar seu e-mail e seguir com o processo para criar uma
+                demanda: </p>
+            <div class="token-box">
+                <p>{{ $token }}</p>
+            </div>
+            <p class="info-text">Atenção: Não compartilhe esse código com ninguém</p>
         </div>
-
-        <p class="info-text">Atenção: Não compartilhe esse código com ninguém</p>
-    </main>
+    </div>
 </body>
 
 </html>

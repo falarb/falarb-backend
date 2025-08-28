@@ -14,18 +14,21 @@ class confirmaSolicitacao extends Mailable
     use Queueable, SerializesModels;
 
     public string $token;
+    public string $userName;
 
-    public function __construct(string $token)
+    public function __construct(string $token, string $userName)
     {
         $this->token = $token;
+        $this->userName = $userName;
     }
 
     public function build()
     {
         return $this->view('emails.confirma_solicitacao')
-            ->subject('Confirmação de Solicitação')
+            ->subject('Solicitação criada com sucesso!')
             ->with([
-                'token' => $this->token
+                'token' => $this->token,
+                'userName' => $this->userName
             ]);
     }
 }

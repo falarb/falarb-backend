@@ -19,12 +19,10 @@ class SolicitacaoController extends Controller
                 $letras .= chr(rand(65, 90)); // ASCII 65-90 = A-Z
             }
 
-            // Gera 3 números aleatórios (000-999)
             $numeros = str_pad(rand(0, 999), 3, '0', STR_PAD_LEFT);
 
             $token = $letras . $numeros;
 
-            // Verifica se o token já existe na base de dados
             $tokenExiste = Solicitacao::where('token_solicitacao', $token)->exists();
 
         } while ($tokenExiste);
@@ -85,11 +83,13 @@ class SolicitacaoController extends Controller
         $dadosSolicitacao['token_solicitacao'] = $this->geraTokenSolicitacao();
         $dadosSolicitacao['status'] = 'analise';
 
-        // Lógica para criar a solicitação
         $solicitacao = Solicitacao::create($dadosSolicitacao);
 
         // Envia o email de confirmação
-        Mail::to($cidadao->email)->send(new confirmaSolicitacao($solicitacao->token_solicitacao));
+        Mail::to($cidadao->email)->send(new confirmaSolicitacao(
+            $solicitacao->token_solicitacao,
+            $cidadao->nome
+        ));
 
         return response()->json($solicitacao, 201);
     }

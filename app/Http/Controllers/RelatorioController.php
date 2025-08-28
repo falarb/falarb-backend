@@ -73,6 +73,7 @@ class RelatorioController extends Controller
             ->landscape()
             ->margins(0, 0, 0, 0)
             ->showBackground()
+            ->addChromiumArguments(['no-sandbox'])
             ->pdf();
 
         return response($pdf)
