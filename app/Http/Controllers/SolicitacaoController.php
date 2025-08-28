@@ -8,6 +8,7 @@ use App\Models\Cidadao;
 use App\Models\Solicitacao;
 use Illuminate\Http\Request;
 use Mail;
+use ConsoleTVs\Profanity\Builder;
 
 class SolicitacaoController extends Controller
 {
@@ -74,6 +75,19 @@ class SolicitacaoController extends Controller
         if ($validator->fails()) {
             return response()->json($validator->errors(), 422);
         }
+
+        // Validação de palavras ofensivas
+        $descricao = $request->input('descricao');
+        if ($descricao && trim($descricao) !== '') {
+            $profanityChecker = Builder::blocker($descricao);
+            if (!$profanityChecker->clean()) {
+                return response()->json([
+                    'erro' => "Conteúdo ofensivo detectado na descrição. Por favor, revise o texto e tente novamente.",
+                    'tipo' => 'texto ofensivo'
+                ], 422);
+            }
+        }
+
 
         $cidadao_id = $request->input('id_cidadao');
         $cidadao = Cidadao::findOrFail($cidadao_id);
