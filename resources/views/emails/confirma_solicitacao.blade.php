@@ -111,7 +111,7 @@
                 <p>{{ $token }}</p>
             </div>
             <p class="info-text">Ou se quiser, pode clicar no botão abaixo para acessar a tela de acompanhamento:</p>
-            <a href="{{ env('WEB_URL') }}/acompanhar-solicitacao/{{ $token }}">
+            <a href="{{ env('WEB_URL') }}/visualizar-solicitacao/{{ $token }}">
                 <p style="margin-top: 5px">Ver solicitação</p>
             </a>
         </div>

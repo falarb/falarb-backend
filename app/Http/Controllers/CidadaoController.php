@@ -77,6 +77,8 @@ class CidadaoController extends Controller
     {
         $cidadao = Cidadao::findOrFail($id);
 
+        $cidadao->total_solicitacoes = Solicitacao::where('id_cidadao', $cidadao->id)->count();
+
         return response()->json($cidadao, 200);
     }
 
