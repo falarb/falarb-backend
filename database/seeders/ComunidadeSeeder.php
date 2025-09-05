@@ -10,13 +10,11 @@ class ComunidadeSeeder extends Seeder
 {
     public function run(): void
     {
-        $comunidades = [
-            ['nome' => 'Comunidade 1'],
-            ['nome' => 'Comunidade 2'],
-            ['nome' => 'Comunidade 3'],
-            ['nome' => 'Comunidade 4'],
-            ['nome' => 'Comunidade 5'],
-        ];
+        $comunidades = [];
+
+        for ($i = 1; $i <= 23; $i++) {
+            $comunidades[] = ['nome' => 'Comunidade ' . $i];
+        }
 
         foreach ($comunidades as $comunidade) {
             Comunidade::create($comunidade);
