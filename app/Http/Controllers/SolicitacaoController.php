@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Validation\SolicitacaoValidation;
 use App\Mail\confirmaSolicitacao;
+use App\Mail\solicitacaoAtualizada;
 use App\Models\Cidadao;
 use App\Models\Solicitacao;
 use Illuminate\Http\Request;
@@ -175,7 +176,18 @@ class SolicitacaoController extends Controller
             'atualizado_por' => $user->id,
         ]));
 
+        if ($request->input('status')) {
+            $solicitacao->load(['cidadao', 'categoria']);
+
+            Mail::to($solicitacao->cidadao->email)->send(new solicitacaoAtualizada(
+                $solicitacao->cidadao->nome,
+                $solicitacao->categoria->nome,
+                $solicitacao->created_at->format('d/m/Y H:i:s'),
+                parseStatus($solicitacao->status),
+                $solicitacao->token_solicitacao
+            ));
+        }
+
         return response()->json($solicitacao, 200);
     }
-
 }

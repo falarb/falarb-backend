@@ -9,11 +9,11 @@ class ComunidadeController extends Controller
 {
     public function listar()
     {
-        $limite = (int) request()->query('limite', 10);
+        $limite = request()->query('limite', null);
         $pagina = (int) request()->query('pagina', 1);
         $ordenar_por = request()->query('ordenar_por', 'id');
         $ordenar_direcao = strtolower(request()->query('ordenar_direcao', 'asc'));
-        $offset = ($pagina - 1) * $limite;
+        $offset = $limite ? ($pagina - 1) * (int) $limite : 0;
 
         $query = Comunidade::query();
 
@@ -47,10 +47,15 @@ class ComunidadeController extends Controller
 
         $total = $query->count();
 
-        $comunidades = $query->offset($offset)
-            ->limit($limite)
-            ->orderBy($ordenar_por, $ordenar_direcao)
-            ->get();
+        if ($limite === null || (int) $limite === 0) {
+            // Sem paginação, retorna todos
+            $comunidades = $query->orderBy($ordenar_por, $ordenar_direcao)->get();
+        } else {
+            $comunidades = $query->offset($offset)
+                ->limit((int) $limite)
+                ->orderBy($ordenar_por, $ordenar_direcao)
+                ->get();
+        }
 
         $comunidades->transform(function ($comunidade) {
             $comunidade->solicitacoes_info = [

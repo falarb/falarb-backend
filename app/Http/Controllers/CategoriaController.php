@@ -9,19 +9,24 @@ class CategoriaController extends Controller
 {
     public function listar()
     {
-        $limite = (int) request()->query('limite', 10);
+        $limite = request()->query('limite', null);
         $pagina = (int) request()->query('pagina', 1);
         $ordenar_por = request()->query('ordenar_por', 'id');
         $ordenar_direcao = strtolower(request()->query('ordenar_direcao', 'asc'));
-        $offset = ($pagina - 1) * $limite;
+        $offset = $limite ? ($pagina - 1) * (int) $limite : 0;
 
         $query = Categoria::query();
         $total = $query->count();
 
-        $categorias = $query->offset($offset)
-            ->limit($limite)
-            ->orderBy($ordenar_por, $ordenar_direcao)
-            ->get();
+        if ($limite === null || (int) $limite === 0) {
+            // Sem paginação, retorna todos
+            $categorias = $query->orderBy($ordenar_por, $ordenar_direcao)->get();
+        } else {
+            $categorias = $query->offset($offset)
+                ->limit((int) $limite)
+                ->orderBy($ordenar_por, $ordenar_direcao)
+                ->get();
+        }
 
         return respostaListagens($categorias, $total, $limite, $pagina);
     }

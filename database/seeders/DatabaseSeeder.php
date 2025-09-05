@@ -12,6 +12,8 @@ class DatabaseSeeder extends Seeder
             ComunidadeSeeder::class,
             CategoriaSeeder::class,
             CidadaoSeeder::class,
+            AdministradorSeeder::class,
         ]);
     }
-};
+}
+;

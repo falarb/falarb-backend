@@ -10,11 +10,11 @@ class DashboardController extends Controller
 {
     public function indicadores()
     {
-        $idUsuario = request()->query('id_usuario');
+        $id_usuario = request()->query('id_usuario');
 
         $query = Solicitacao::query();
-        if ($idUsuario) {
-            $query->where('id_cidadao', $idUsuario);
+        if ($id_usuario) {
+            $query->where('id_cidadao', $id_usuario);
         }
 
         // Solicitações por status

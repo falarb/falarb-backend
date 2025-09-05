@@ -25,9 +25,29 @@ function pegaCorStatus($status)
     }
 }
 
+function parseStatus($status)
+{
+    switch (strtolower($status)) {
+        case 'analise':
+            return 'Em Análise';
+        case 'concluida':
+            return 'Concluída';
+        case 'agendada':
+            return 'Agendada';
+        case 'indeferida':
+            return 'Indeferida';
+        default:
+            return 'Desconhecido';
+    }
+}
+
 // Componente padrão para respostas de listagens com paginação
 function respostaListagens($dados, $total, $limite, $pagina)
 {
+    if (!$limite) {
+        $limite = $total ?: 1;
+        $pagina = 1;
+    }
     $totalPaginas = (int) ceil($total / $limite);
     $offset = ($pagina - 1) * $limite;
     $temProximaPagina = $pagina < $totalPaginas;

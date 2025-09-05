@@ -130,7 +130,6 @@
             font-size: 12px;
             font-weight: 600;
             color: #FFF;
-            text-transform: capitalize;
         }
 
         @page {

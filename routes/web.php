@@ -1,5 +1,6 @@
 <?php
 
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\RelatorioController;
 
@@ -33,5 +34,16 @@ Route::get('/confirma-solicitacao', function () {
     return view('emails.confirma_solicitacao', [
         'userName' => 'Fulano de Tal',
         'token' => '12345'
+    ]);
+});
+
+// E-mail de solicitação atualizada
+Route::get('/solicitacao-atualizada', function () {
+    return view('emails.solicitacao_atualizada', [
+        'userName' => 'Fulano de Tal',
+        'categoria' => 'Iluminação Pública',
+        'dataCriacao' => Carbon::parse('2023-10-01 14:30:00')->format('d/m/Y H:i:s'),
+        'status' => parseStatus('analise'),
+        'token' => '67890'
     ]);
 });

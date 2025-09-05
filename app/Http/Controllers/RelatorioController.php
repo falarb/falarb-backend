@@ -60,7 +60,7 @@ class RelatorioController extends Controller
 
         foreach ($dadosPdf as $dado) {
             $dado->status_cor = pegaCorStatus($dado->status);
-            $dado->status = ucfirst($dado->status);
+            $dado->status = parseStatus($dado->status);
         }
 
         $pdf = Browsershot::html(view('relatorios.geral', [
