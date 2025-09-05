@@ -21,7 +21,7 @@ return new class extends Migration {
             $table->boolean('bloqueado')->default(false);
             $table->timestamp('bloqueado_em')->nullable();
             $table->string('bloqueado_por')->nullable();
-            $table->softDeletes();
+            $table->boolean('ativo')->default(true);
             $table->timestamps();
         });
     }

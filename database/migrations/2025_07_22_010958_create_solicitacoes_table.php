@@ -26,7 +26,6 @@ return new class extends Migration {
             $table->foreign('id_cidadao')->references('id')->on('cidadaos')->onDelete('cascade');
             $table->foreign('id_categoria')->references('id')->on('categorias')->onDelete('cascade');
             $table->foreign('id_comunidade')->references('id')->on('comunidades')->onDelete('cascade');
-            $table->softDeletes();
             $table->timestamps();
         });
     }

@@ -10,7 +10,7 @@ use Laravel\Sanctum\HasApiTokens;
 
 class Administrador extends Authenticatable
 {
-    use HasAlphanumericId, SoftDeletes, HasApiTokens;
+    use HasAlphanumericId, HasApiTokens;
 
     protected $table = 'administradors';
 

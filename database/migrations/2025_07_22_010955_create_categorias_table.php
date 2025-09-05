@@ -13,7 +13,7 @@ return new class extends Migration {
         Schema::create('categorias', function (Blueprint $table) {
             $table->string('id', 24)->primary();
             $table->string('nome');
-            $table->softDeletes();
+            $table->boolean('ativo')->default(true);
             $table->timestamps();
         });
     }

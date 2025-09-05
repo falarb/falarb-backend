@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Cidadao extends Model
 {
-    use HasAlphanumericId, SoftDeletes;
+    use HasAlphanumericId;
 
     protected $table = 'cidadaos';
 
@@ -22,7 +22,8 @@ class Cidadao extends Model
         'codigo_enviado_em',
         'bloqueado',
         'bloqueado_em',
-        'bloqueado_por'
+        'bloqueado_por',
+        'ativo',
     ];
 
     protected $casts = [
@@ -30,6 +31,7 @@ class Cidadao extends Model
         'bloqueado' => 'boolean',
         'codigo_enviado_em' => 'datetime',
         'bloqueado_em' => 'datetime',
+        'ativo' => 'boolean',
     ];
 
     // Relacionamentos

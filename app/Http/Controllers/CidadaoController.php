@@ -21,6 +21,34 @@ class CidadaoController extends Controller
         $offset = ($pagina - 1) * $limite;
 
         $query = Cidadao::query();
+
+        // Filtros
+        $nome = request()->query('nome', null);
+        $email = request()->query('email', null);
+        $cpf = request()->query('cpf', null);
+        $ativo = request()->query('ativo', null);
+        $termo_geral = request()->query('termo_geral', null);
+
+        if ($nome) {
+            $query->where('nome', 'like', "%$nome%");
+        }
+        if ($email) {
+            $query->where('email', 'like', "%$email%");
+        }
+        if ($cpf) {
+            $query->where('cpf', 'like', "%$cpf%");
+        }
+        if (!is_null($ativo)) {
+            $query->where('ativo', filter_var($ativo, FILTER_VALIDATE_BOOLEAN));
+        }
+        if ($termo_geral) {
+            $query->where(function ($q) use ($termo_geral) {
+                $q->where('nome', 'like', "%$termo_geral%")
+                    ->orWhere('email', 'like', "%$termo_geral%")
+                    ->orWhere('cpf', 'like', "%$termo_geral%");
+            });
+        }
+
         $total = $query->count();
 
         $cidadaos = $query->offset($offset)

@@ -8,11 +8,11 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Comunidade extends Model
 {
-    use HasAlphanumericId, SoftDeletes;
+    use HasAlphanumericId;
 
     protected $table = 'comunidades';
 
-    protected $fillable = ['nome'];
+    protected $fillable = ['nome', 'ativo'];
 
     // Relacionamentos
     public function solicitacoes()

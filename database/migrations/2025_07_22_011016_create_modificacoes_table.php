@@ -20,7 +20,6 @@ return new class extends Migration {
             $table->string('id_solicitacao', 24);
             $table->foreign('id_administrador')->references('id')->on('administradors')->onDelete('cascade');
             $table->foreign('id_solicitacao')->references('id')->on('solicitacoes')->onDelete('cascade');
-            $table->softDeletes();
             $table->timestamps();
         });
     }

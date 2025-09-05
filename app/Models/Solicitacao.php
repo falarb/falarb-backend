@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Solicitacao extends Model
 {
-    use HasAlphanumericId, SoftDeletes;
+    use HasAlphanumericId;
 
     protected $table = 'solicitacoes';
 

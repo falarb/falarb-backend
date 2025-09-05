@@ -16,8 +16,21 @@ class ComunidadeController extends Controller
         $offset = ($pagina - 1) * $limite;
 
         $query = Comunidade::query();
-        $total = $query->count();
 
+        // Filtros
+        $nome = request()->query('nome', null);
+        $ativo = request()->query('ativo', null);
+        $termo_geral = request()->query('termo_geral', null);
+
+        if ($nome) {
+            $query->where('nome', 'like', "%$nome%");
+        }
+        if (!is_null($ativo)) {
+            $query->where('ativo', filter_var($ativo, FILTER_VALIDATE_BOOLEAN));
+        }
+        if ($termo_geral) {
+            $query->where('nome', 'like', "%$termo_geral%");
+        }
 
         $query->withCount([
             'solicitacoes as total_solicitacoes',
@@ -31,6 +44,8 @@ class ComunidadeController extends Controller
                 $q->where('status', 'analise');
             },
         ]);
+
+        $total = $query->count();
 
         $comunidades = $query->offset($offset)
             ->limit($limite)
@@ -103,7 +118,7 @@ class ComunidadeController extends Controller
     public function excluir($id)
     {
         $comunidade = Comunidade::findOrFail($id);
-        $comunidade->delete();
+        $comunidade->update(['ativo' => false]);
         return response()->json(["message" => "Comunidade excluída com sucesso"], 200);
     }
 }

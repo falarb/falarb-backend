@@ -13,7 +13,7 @@ return new class extends Migration {
         Schema::create('comunidades', function (Blueprint $table) {
             $table->string('id', 24)->primary();
             $table->string('nome');
-            $table->softDeletes();
+            $table->string('ativo')->default(true);
             $table->timestamps();
         });
     }

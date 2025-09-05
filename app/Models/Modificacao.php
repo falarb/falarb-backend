@@ -8,8 +8,8 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Modificacao extends Model
 {
-    use HasAlphanumericId, SoftDeletes;
-    
+    use HasAlphanumericId;
+
     protected $table = 'modificacoes';
 
     protected $fillable = [

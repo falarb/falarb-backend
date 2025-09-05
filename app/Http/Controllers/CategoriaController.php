@@ -61,9 +61,7 @@ class CategoriaController extends Controller
     public function excluir($id)
     {
         $categoria = Categoria::findOrFail($id);
-        $categoria->deletado_por = auth()->user()->id;
-        $categoria->save();
-        $categoria->delete();
+        $categoria->update(['ativo' => false]);
         return response()->json(['message' => 'Categoria excluída com sucesso'], 200);
     }
 }

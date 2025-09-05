@@ -39,7 +39,46 @@ class SolicitacaoController extends Controller
         $ordenar_direcao = strtolower(request()->query('ordenar_direcao', 'asc'));
         $offset = ($pagina - 1) * $limite;
 
+        // Filtros
+        $status = request()->query('status', null);
+        $categoria = request()->query('categoria', null);
+        $comunidade = request()->query('comunidade', null);
+        $cidadao = request()->query('cidadao', null);
+        $termo_geral = request()->query('termo_geral', null);
+
         $query = Solicitacao::with(['cidadao', 'comunidade', 'categoria']);
+
+        if ($status) {
+            $query->where('status', $status);
+        }
+
+        if ($categoria) {
+            $query->where('id_categoria', $categoria);
+        }
+
+        if ($comunidade) {
+            $query->where('id_comunidade', $comunidade);
+        }
+
+        if ($cidadao) {
+            $query->where('id_cidadao', $cidadao);
+        }
+
+        if ($termo_geral) {
+            $query->where(function ($q) use ($termo_geral) {
+                $q->where('descricao', 'like', "%$termo_geral%")
+                    ->orWhereHas('cidadao', function ($q) use ($termo_geral) {
+                        $q->where('nome', 'like', "%$termo_geral%");
+                    })
+                    ->orWhereHas('comunidade', function ($q) use ($termo_geral) {
+                        $q->where('nome', 'like', "%$termo_geral%");
+                    })
+                    ->orWhereHas('categoria', function ($q) use ($termo_geral) {
+                        $q->where('nome', 'like', "%$termo_geral%");
+                    });
+            });
+        }
+
         $total = $query->count();
 
         $solicitacoes = $query->offset($offset)
