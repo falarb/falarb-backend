@@ -14,7 +14,6 @@ use Illuminate\Support\Facades\Route;
 // Autenticação Painel Administrador
 Route::post('/login', [AuthController::class, 'loginAdministrador']);
 Route::post('/esqueci-senha', [AuthController::class, 'esqueciSenha']);
-Route::post('/admin', [AdministradorController::class, 'criar']);
 
 // ---> ROTAS PUBLICAS <---
 // Comunidades
@@ -48,6 +47,8 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::prefix('administradores')->group(function () {
         Route::get('/', [AdministradorController::class, 'listar']);
         Route::get('/{id}', [AdministradorController::class, 'visualizar']);
+        Route::post('/', [AdministradorController::class, 'criar']);
+        Route::put('/{id}', [AdministradorController::class, 'atualizar']);
     });
 
     // Categorias
