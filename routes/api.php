@@ -71,6 +71,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
         Route::get('/', [CidadaoController::class, 'listar']);
         Route::get('/{id}', [CidadaoController::class, 'visualizar']);
         Route::put('/{id}', [CidadaoController::class, 'atualizar']);
+        Route::delete('/{id}', [CidadaoController::class, 'excluir']);
     });
 
     // Modificações

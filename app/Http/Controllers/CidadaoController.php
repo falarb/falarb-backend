@@ -161,4 +161,11 @@ class CidadaoController extends Controller
 
         return response()->json(['id' => null], 200);
     }
+
+    public function excluir($id)
+    {
+        $cidadao = Cidadao::findOrFail($id);
+        $cidadao->update(['ativo' => false]);
+        return response()->json(["message" => "Cidadão excluído com sucesso"], 200);
+    }
 }
