@@ -36,7 +36,7 @@ class CidadaoValidation
         return validator($data, [
             'nome' => 'sometimes|required|string|max:60',
             'email' => 'sometimes|required|email|unique:cidadaos,email,' . $cidadao->id,
-            'cpf' => 'sometimes|required|string|cpf|unique:cidadaos,cpf,' . $cidadao->id,
+            'cpf' => 'sometimes|required|string|unique:cidadaos,cpf,' . $cidadao->id,
             'telefone' => 'sometimes|nullable|string|max:15|unique:cidadaos,telefone,' . $cidadao->id,
             'email_verificado' => 'sometimes|boolean',
             'ultimo_codigo' => 'sometimes|nullable|string',

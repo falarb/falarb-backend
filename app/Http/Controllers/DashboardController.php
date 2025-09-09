@@ -13,26 +13,27 @@ class DashboardController extends Controller
         $id_usuario = request()->query('id_usuario');
         $id_comunidade = request()->query('id_comunidade');
 
-        $query = Solicitacao::query();
+        // Filtros iniciais
+        $baseQuery = Solicitacao::query();
         if ($id_usuario) {
-            $query->where('id_cidadao', $id_usuario);
+            $baseQuery->where('id_cidadao', $id_usuario);
         }
-
         if ($id_comunidade) {
-            $query->where('id_comunidade', $id_comunidade);
+            $baseQuery->where('id_comunidade', $id_comunidade);
         }
 
-        // Solicitações por status
+        // Solicitações por status (usando clone para não acumular where)
         $solicitacoesPorStatus = [
-            'total' => $query->count(),
-            'analise' => $query->where('status', 'analise')->count(),
-            'agendada' => $query->where('status', 'agendada')->count(),
-            'concluida' => $query->where('status', 'concluida')->count(),
-            'indeferida' => $query->where('status', 'indeferida')->count(),
+            'total' => (clone $baseQuery)->count(),
+            'analise' => (clone $baseQuery)->where('status', 'analise')->count(),
+            'agendada' => (clone $baseQuery)->where('status', 'agendada')->count(),
+            'concluida' => (clone $baseQuery)->where('status', 'concluida')->count(),
+            'indeferida' => (clone $baseQuery)->where('status', 'indeferida')->count(),
         ];
 
         // 6 Categorias de solicitações mais requisitadas
-        $categoriasIds = $query->select('id_categoria')
+        $categoriasIds = (clone $baseQuery)
+            ->select('id_categoria')
             ->groupBy('id_categoria')
             ->orderByRaw('COUNT(*) DESC')
             ->limit(6)
