@@ -10,13 +10,13 @@ class DashboardController extends Controller
 {
     public function indicadores()
     {
-        $id_usuario = request()->query('id_usuario');
+        $id_cidadao = request()->query('id_cidadao');
         $id_comunidade = request()->query('id_comunidade');
 
         // Filtros iniciais
         $baseQuery = Solicitacao::query();
-        if ($id_usuario) {
-            $baseQuery->where('id_cidadao', $id_usuario);
+        if ($id_cidadao) {
+            $baseQuery->where('id_cidadao', $id_cidadao);
         }
         if ($id_comunidade) {
             $baseQuery->where('id_comunidade', $id_comunidade);
