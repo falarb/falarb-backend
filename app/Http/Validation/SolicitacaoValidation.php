@@ -42,8 +42,8 @@ class SolicitacaoValidation
             'id_categoria' => 'sometimes|required|exists:categorias,id',
             'id_comunidade' => 'sometimes|required|exists:comunidades,id',
             'status' => 'sometimes|in:analise,agendada,concluida,indeferida',
-            'data_agendamento' => 'sometimes|date',
-            'data_conclusao' => 'sometimes|date',
+            'data_agendamento' => 'sometimes|nullable|date',
+            'data_conclusao' => 'sometimes|nullable|date',
             'latitude' => 'sometimes|required|numeric',
             'longitude' => 'sometimes|required|numeric',
         ], self::messages());
