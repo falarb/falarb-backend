@@ -10,11 +10,13 @@ class CategoriaSeeder extends Seeder
 {
     public function run(): void
     {
-        $categorias = [];
-
-        for ($i = 1; $i <= 23; $i++) {
-            $categorias[] = ['nome' => 'Categoria ' . $i];
-        }
+        $categorias = [
+            ['nome' => 'Pedido de cascalhamento'],
+            ['nome' => 'Pedido de abertura de estrada'],
+            ['nome' => 'Pedido de terraplanagem'],
+            ['nome' => 'Pedido de serviço de máquina (retro escavadeira ou trator agrícola)'],
+            ['nome' => 'Pedido de manutenção de estrada'],
+        ];
 
         foreach ($categorias as $categoria) {
             Categoria::create($categoria);
