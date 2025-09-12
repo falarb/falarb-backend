@@ -1,5 +1,7 @@
 <?php
 
+use App\Models\Solicitacao;
+
 // Gera um token de 4 dígitos
 function geraToken()
 {
@@ -64,4 +66,14 @@ function respostaListagens($dados, $total, $limite, $pagina)
         'tem_proxima_pagina' => $temProximaPagina,
         'tem_pagina_anterior' => $temPaginaAnterior,
     ], 200);
+}
+
+function solicitacoesAbertas($id_cidadao)
+{
+    return Solicitacao::where('id_cidadao', $id_cidadao)
+        ->where(function ($query) {
+            $query->where('status', 'analise')
+                ->orWhere('status', 'agendada');
+        })
+        ->count();
 }

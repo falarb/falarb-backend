@@ -155,11 +155,24 @@ class CidadaoController extends Controller
 
         $cidadao = Cidadao::where('email', $email)->first();
 
-        if ($cidadao) {
-            return response()->json(['id' => $cidadao->id], 200);
+        if (!$cidadao) {
+            return response()->json(['id' => null], 200);
         }
 
-        return response()->json(['id' => null], 200);
+        $solicitacoesAbertas = solicitacoesAbertas($cidadao->id);
+        if ($solicitacoesAbertas >= 5) {
+            return response()->json([
+                'error' => 'max_solicitacoes_abertas',
+                'mensagem' => 'Você já possui 5 solicitações em análise ou agendadas. Por favor, aguarde a conclusão de alguma delas antes de abrir uma nova solicitação.'
+            ], 400);
+        } else if ($cidadao->bloqueado) {
+            return response()->json([
+                'error' => 'cidadao_bloqueado',
+                'mensagem' => 'Seu acesso ao sistema está bloqueado. Por favor, entre em contato com o suporte para mais informações.'
+            ], 403);
+        }
+
+        return response()->json(['id' => $cidadao->id], 200);
     }
 
     public function excluir($id)
