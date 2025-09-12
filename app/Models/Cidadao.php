@@ -21,8 +21,6 @@ class Cidadao extends Model
         'ultimo_codigo',
         'codigo_enviado_em',
         'bloqueado',
-        'bloqueado_em',
-        'bloqueado_por',
         'ativo',
     ];
 
@@ -30,7 +28,6 @@ class Cidadao extends Model
         'email_verificado' => 'boolean',
         'bloqueado' => 'boolean',
         'codigo_enviado_em' => 'datetime',
-        'bloqueado_em' => 'datetime',
         'ativo' => 'boolean',
     ];
 

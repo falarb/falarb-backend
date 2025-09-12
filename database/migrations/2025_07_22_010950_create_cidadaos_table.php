@@ -19,8 +19,6 @@ return new class extends Migration {
             $table->string('ultimo_codigo')->nullable();
             $table->timestamp('codigo_enviado_em')->nullable();
             $table->boolean('bloqueado')->default(false);
-            $table->timestamp('bloqueado_em')->nullable();
-            $table->string('bloqueado_por')->nullable();
             $table->boolean('ativo')->default(true);
             $table->timestamps();
         });

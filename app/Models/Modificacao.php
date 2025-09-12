@@ -17,8 +17,11 @@ class Modificacao extends Model
         'valor_anterior',
         'gerado_em',
         'tipo',
-        'id_user',
-        'id_solicitacao'
+        'id_administrador',
+        'id_solicitacao',
+        'id_categoria',
+        'id_comunidade',
+        'id_cidadao'
     ];
 
     protected $casts = [

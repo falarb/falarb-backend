@@ -75,6 +75,7 @@ class AdministradorController extends Controller
         // Se o usuário está sendo desativado, limpa o token de autenticação
         if (isset($request->ativo) && !$request->ativo) {
             $administrador->tokens()->delete();
+            $administrador->desativado_em = now();
         }
 
         $administrador->update($request->all());

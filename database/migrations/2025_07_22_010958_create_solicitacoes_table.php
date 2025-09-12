@@ -17,7 +17,7 @@ return new class extends Migration {
             $table->text('descricao')->nullable();
             $table->date('data_agendamento')->nullable();
             $table->datetime('data_conclusao')->nullable();
-            $table->string('token_solicitacao', 6)->nullable();
+            $table->string('token_solicitacao', 6);
             $table->decimal('latitude', 9, 6)->nullable();
             $table->decimal('longitude', 9, 6)->nullable();
             $table->string('id_cidadao', 24);

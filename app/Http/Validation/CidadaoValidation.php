@@ -42,8 +42,6 @@ class CidadaoValidation
             'ultimo_codigo' => 'sometimes|nullable|string',
             'codigo_enviado_em' => 'sometimes|nullable|date',
             'bloqueado' => 'sometimes|boolean',
-            'bloqueado_por' => 'sometimes|nullable|string',
-            'bloqueado_em' => 'sometimes|nullable|date',
         ], self::mensagens());
     }
 }
