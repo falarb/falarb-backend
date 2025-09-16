@@ -49,6 +49,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
         Route::get('/{id}', [AdministradorController::class, 'visualizar']);
         Route::post('/', [AdministradorController::class, 'criar']);
         Route::put('/{id}', [AdministradorController::class, 'atualizar']);
+        Route::delete('/{id}', [AdministradorController::class, 'excluir']);
     });
 
     // Categorias

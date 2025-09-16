@@ -81,4 +81,15 @@ class AdministradorController extends Controller
         $administrador->update($request->all());
         return response()->json($administrador, 200);
     }
+
+    public function excluir($id)
+    {
+        $administrador = Administrador::findOrFail($id);
+        $administrador->tokens()->delete();
+        $administrador->desativado_em = now();
+        $administrador->ativo = false;
+
+        $administrador->save();
+        return response()->json(['mensagem' => 'Administrador excluído com sucesso'], 200);
+    }
 }
