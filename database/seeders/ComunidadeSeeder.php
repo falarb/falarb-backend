@@ -43,7 +43,6 @@ class ComunidadeSeeder extends Seeder
             ['nome' => 'Pântano'],
             ['nome' => 'Pântano Preto'],
             ['nome' => 'Faxinal Marmeleiro'],
-            ['nome' => 'Marmeleiro dos Rosa'],
             ['nome' => 'Barro Branco'],
             ['nome' => 'Turvo']
         ];
