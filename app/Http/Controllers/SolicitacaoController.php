@@ -102,8 +102,10 @@ class SolicitacaoController extends Controller
     {
         // Verifica se existe 5 solicitações abertas para o cidadão
         $solicitacoesAbertas = Solicitacao::where('id_cidadao', $request->input('id_cidadao'))
-            ->where('status', 'analise')
-            ->orWhere('status', 'agendada')
+            ->where(function ($query) {
+                $query->where('status', 'analise')
+                    ->orWhere('status', 'agendada');
+            })
             ->count();
 
         if ($solicitacoesAbertas >= 5) {
