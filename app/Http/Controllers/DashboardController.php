@@ -11,7 +11,7 @@ class DashboardController extends Controller
     public function indicadores()
     {
         $id_cidadao = request()->query('id_cidadao');
-        $id_comunidade = request()->query('id_comunidade');
+        $id_comunidade = request()->query('comunidade_id');
 
         // Filtros iniciais
         $baseQuery = Solicitacao::query();
