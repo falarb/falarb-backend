@@ -16,6 +16,8 @@ class CategoriaSeeder extends Seeder
             ['nome' => 'Pedido de terraplanagem'],
             ['nome' => 'Pedido de serviço de máquina (retro escavadeira ou trator agrícola)'],
             ['nome' => 'Pedido de manutenção de estrada'],
+            ['nome' => 'Pedido de construção de ponte'],
+            ['nome' => 'Pedido de construção de bueiro']
         ];
 
         foreach ($categorias as $categoria) {

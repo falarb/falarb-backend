@@ -3,9 +3,8 @@
 namespace Database\Seeders;
 
 use App\Models\Cidadao;
-use Hash;
 use Illuminate\Database\Seeder;
-
+use Faker\Factory as FakerFactory;
 
 class CidadaoSeeder extends Seeder
 {
@@ -14,13 +13,14 @@ class CidadaoSeeder extends Seeder
      */
     public function run(): void
     {
-        for ($i = 1; $i <= 23; $i++) {
+        $faker = FakerFactory::create('pt_BR');
+        for ($i = 1; $i <= 782; $i++) {
             Cidadao::create([
-                'nome' => 'Cidadão ' . $i,
-                'email' => 'cidadao' . $i . '@example.com',
-                'cpf' => str_pad($i, 11, '0', STR_PAD_LEFT),
-                'telefone' => '11999999' . str_pad($i, 3, '0', STR_PAD_LEFT),
-                'ultimo_codigo' => '0101',
+                'nome' => $faker->name,
+                'email' => $faker->unique()->safeEmail,
+                'cpf' => $faker->cpf(false),
+                'telefone' => $faker->cellphoneNumber,
+                'ultimo_codigo' => $faker->numerify('####'),
             ]);
         }
     }
