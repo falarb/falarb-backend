@@ -27,6 +27,7 @@ Route::prefix('cidadaos')->group(function () {
     Route::post('/envia-token/{id}', [CidadaoController::class, 'enviaToken']);
     Route::post('/verifica-email/{id}', [CidadaoController::class, 'verificaEmail']);
     Route::get('/email-existe', [CidadaoController::class, 'emailExiste']);
+    Route::put('/atualiza-email/{id}', [CidadaoController::class, 'atualizaEmail']);
 });
 
 // Solicitações

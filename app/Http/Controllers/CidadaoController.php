@@ -110,20 +110,25 @@ class CidadaoController extends Controller
         return response()->json($cidadao, 200);
     }
 
-    public function enviaToken($id)
+    public function enviaToken($id, Request $request)
     {
         $cidadao = Cidadao::findOrFail($id);
+        $reenviarCodigo = $request->input('reenviar_codigo', false);
 
         if ($cidadao->bloqueado) {
             return response()->json(['message' => 'Cidadão bloqueado'], 403);
         }
 
-        $token = geraToken();
-        $cidadao->ultimo_codigo = $token;
-        $cidadao->codigo_enviado_em = now();
-        $cidadao->save();
+        $token = $cidadao->ultimo_codigo;
 
-        Mail::to($cidadao->email)->send(new tokenValidaEmail($token, $cidadao->nome));
+        if (!$reenviarCodigo || !$token) {
+            $token = geraToken();
+            $cidadao->ultimo_codigo = $token;
+            $cidadao->codigo_enviado_em = now();
+            $cidadao->save();
+        }
+
+        // Mail::to($cidadao->email)->send(new tokenValidaEmail($token, $cidadao->nome));
 
         return response()->json(['message' => 'Token enviado com sucesso'], 200);
     }
@@ -170,9 +175,38 @@ class CidadaoController extends Controller
                 'error' => 'cidadao_bloqueado',
                 'mensagem' => 'Seu acesso ao sistema está bloqueado. Por favor, entre em contato com o suporte para mais informações.'
             ], 403);
+        } else if (!$cidadao->ativo) {
+            return response()->json([
+                'error' => 'cidadao_inativo',
+                'mensagem' => 'Seu cadastro está inativo. Por favor, entre em contato com o suporte para mais informações.'
+            ], 403);
         }
 
         return response()->json(['id' => $cidadao->id], 200);
+    }
+
+    public function atualizaEmail(Request $request, $id)
+    {
+        $cidadao = Cidadao::findOrFail($id);
+        $novoEmail = trim($request->input('email'));
+
+        if (!$novoEmail) {
+            return response()->json(['message' => 'O campo email é obrigatório'], 422);
+        }
+
+        if ($cidadao->email === $novoEmail) {
+            return response()->json(['message' => 'O novo email deve ser diferente do email atual'], 422);
+        }
+
+        $emailExistente = Cidadao::where('email', $novoEmail)->first();
+        if ($emailExistente) {
+            return response()->json(['message' => 'O email informado já está em uso por outro cidadão'], 409);
+        }
+
+        $cidadao->email = $novoEmail;
+        $cidadao->save();
+
+        return response()->json(['message' => 'Email atualizado com sucesso', 'email' => $cidadao->email], 200);
     }
 
     public function excluir($id)
