@@ -9,11 +9,11 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
         $this->call([
+            AdministradorSeeder::class,
             ComunidadeSeeder::class,
             CategoriaSeeder::class,
-            CidadaoSeeder::class,
-            AdministradorSeeder::class,
-            SolicitacaoSeeder::class,
+            // CidadaoSeeder::class,
+            // SolicitacaoSeeder::class,
         ]);
     }
 }
