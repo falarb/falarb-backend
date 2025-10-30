@@ -77,7 +77,7 @@
 <body>
     <div class="container">
         <header>
-            <img src="https://raw.githubusercontent.com/falarb/falarb-backend/main/public/img/logo.png"
+            <img src="https://d1vb2izimosth9.cloudfront.net/LOGO.png"
                 alt="Logo Solicita Aí">
         </header>
         <div class="main">

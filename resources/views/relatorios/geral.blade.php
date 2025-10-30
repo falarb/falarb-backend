@@ -149,7 +149,7 @@
             <svg width="8" height="8" viewBox="0 0 8 8" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <circle cx="4" cy="4" r="4" fill="#D9D9D9" />
             </svg>
-            <h2 class="subtitle">Fala Rebouças</h2>
+            <h2 class="subtitle">Solicita Aí</h2>
         </div>
 
         <div class="filters-section">
