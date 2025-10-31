@@ -44,7 +44,8 @@ class ComunidadeSeeder extends Seeder
             ['nome' => 'Pântano Preto'],
             ['nome' => 'Faxinal Marmeleiro'],
             ['nome' => 'Barro Branco'],
-            ['nome' => 'Turvo']
+            ['nome' => 'Turvo'],
+            ['nome' => 'Centro'],
         ];
 
         foreach ($comunidades as $comunidade) {

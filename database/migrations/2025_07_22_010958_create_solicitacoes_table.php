@@ -15,6 +15,7 @@ return new class extends Migration {
             $table->enum('status', ['analise', 'agendada', 'concluida', 'indeferida']);
             $table->string('mot_indeferimento', 255)->nullable();
             $table->text('descricao')->nullable();
+            $table->string('additional_address', 70)->nullable();
             $table->date('data_agendamento')->nullable();
             $table->datetime('data_conclusao')->nullable();
             $table->string('token_solicitacao', 6);

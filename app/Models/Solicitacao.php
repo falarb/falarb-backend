@@ -16,6 +16,7 @@ class Solicitacao extends Model
         'status',
         'mot_indeferimento',
         'descricao',
+        'additional_address',
         'data_agendamento',
         'data_conclusao',
         'latitude',
