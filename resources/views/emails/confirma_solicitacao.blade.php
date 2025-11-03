@@ -97,8 +97,7 @@
 <body>
     <div class="container">
         <header>
-            <img src="https://d1vb2izimosth9.cloudfront.net/LOGO.png"
-                alt="Logo Solicita Aí">
+            <img src="https://d1vb2izimosth9.cloudfront.net/LOGO.png" alt="Logo Solicita Aí">
         </header>
         <div class="main">
             <h1>Sua solicitação foi criada com sucesso!</h1>
@@ -111,7 +110,7 @@
                 <p>{{ $token }}</p>
             </div>
             <p class="info-text">Ou se quiser, pode clicar no botão abaixo para acessar a tela de acompanhamento:</p>
-            <a href="{{ env('WEB_URL') }}/visualizar-solicitacao/{{ $token }}">
+            <a href="https://www.solicitaai-reboucas.com.br/visualizar-solicitacao/{{ $token }}">
                 <p style="margin-top: 5px">Ver solicitação</p>
             </a>
         </div>
