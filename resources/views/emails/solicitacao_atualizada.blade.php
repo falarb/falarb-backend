@@ -119,7 +119,7 @@
             </ol>
 
             <p class="info-text">Ou se quiser, pode clicar no botão abaixo para acessar a tela de acompanhamento:</p>
-            <a href="{{ env('WEB_URL') }}/visualizar-solicitacao/{{ $token }}">
+            <a href="https://www.solicitaai-reboucas.com.br/visualizar-solicitacao/{{ $token }}">
                 <p style="margin-top: 5px">Ver solicitação</p>
             </a>
         </div>
