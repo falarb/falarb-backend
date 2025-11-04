@@ -15,7 +15,15 @@ class CategoriaController extends Controller
         $ordenar_direcao = strtolower(request()->query('ordenar_direcao', 'asc'));
         $offset = $limite ? ($pagina - 1) * (int) $limite : 0;
 
+        // Filtros
+        $ativo = request()->query('ativo', null);
+
         $query = Categoria::query();
+
+        if (!is_null($ativo)) {
+            $query->where('ativo', filter_var($ativo, FILTER_VALIDATE_BOOLEAN));
+        }
+
         $total = $query->count();
 
         if ($limite === null || (int) $limite === 0) {
@@ -33,13 +41,11 @@ class CategoriaController extends Controller
 
     public function criar(Request $request)
     {
-        $user = $request->user();
-
         $dadosCategoria = $request->validate([
             'nome' => 'required|string|max:255',
         ]);
 
-        $categoria = Categoria::create(array_merge($dadosCategoria, ['criado_por' => $user->id]));
+        $categoria = Categoria::create($dadosCategoria);
         return response()->json($categoria, 201);
     }
 
