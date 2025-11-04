@@ -114,6 +114,7 @@ class ComunidadeController extends Controller
         $comunidade = Comunidade::findOrFail($id);
         $data = $request->validate([
             'nome' => 'sometimes|required|string|max:255',
+            'ativo' => 'sometimes|boolean',
         ]);
 
         $comunidade->update($data);
@@ -123,6 +124,13 @@ class ComunidadeController extends Controller
     public function excluir($id)
     {
         $comunidade = Comunidade::findOrFail($id);
+
+        $temSolicitacoes = $comunidade->solicitacoes()->exists();
+
+        if ($temSolicitacoes) {
+            return response()->json(["message" => "Não é possível excluir a comunidade pois existem solicitações associadas a ela."], 400);
+        }
+
         $comunidade->update(['ativo' => false]);
         return response()->json(["message" => "Comunidade excluída com sucesso"], 200);
     }

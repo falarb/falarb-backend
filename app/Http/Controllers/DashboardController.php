@@ -12,6 +12,7 @@ class DashboardController extends Controller
     {
         $id_cidadao = request()->query('id_cidadao');
         $id_comunidade = request()->query('comunidade_id');
+        $id_categoria = request()->query('categoria_id');
         $data = request()->query('data');
 
         // Filtros iniciais
@@ -21,6 +22,9 @@ class DashboardController extends Controller
         }
         if ($id_comunidade) {
             $baseQuery->where('id_comunidade', $id_comunidade);
+        }
+        if ($id_categoria) {
+            $baseQuery->where('id_categoria', $id_categoria);
         }
 
         if ($data == 'ultima_semana') {
@@ -55,27 +59,29 @@ class DashboardController extends Controller
             ->pluck('id_categoria');
 
         $solicitacoesPorCategoria = Categoria::whereIn('id', $categoriasIds)
-            ->withCount(['solicitacoes AS total_solicitacoes' => function ($query) use ($id_cidadao, $id_comunidade, $data) {
-                if ($id_cidadao) {
-                    $query->where('id_cidadao', $id_cidadao);
+            ->withCount([
+                'solicitacoes AS total_solicitacoes' => function ($query) use ($id_cidadao, $id_comunidade, $data) {
+                    if ($id_cidadao) {
+                        $query->where('id_cidadao', $id_cidadao);
+                    }
+                    if ($id_comunidade) {
+                        $query->where('id_comunidade', $id_comunidade);
+                    }
+                    if ($data == 'ultima_semana') {
+                        $query->where('created_at', '>=', now()->subWeek());
+                    } else if ($data == 'duas_semanas') {
+                        $query->where('created_at', '>=', now()->subWeeks(2));
+                    } else if ($data == 'ultimo_mes') {
+                        $query->where('created_at', '>=', now()->subMonth());
+                    } else if ($data == 'ultimo_bimestre') {
+                        $query->where('created_at', '>=', now()->subMonths(2));
+                    } else if ($data == 'ultimo_semestre') {
+                        $query->where('created_at', '>=', now()->subMonths(6));
+                    } else if ($data == 'ultimo_ano') {
+                        $query->where('created_at', '>=', now()->subYear());
+                    }
                 }
-                if ($id_comunidade) {
-                    $query->where('id_comunidade', $id_comunidade);
-                }
-                if ($data == 'ultima_semana') {
-                    $query->where('created_at', '>=', now()->subWeek());
-                } else if ($data == 'duas_semanas') {
-                    $query->where('created_at', '>=', now()->subWeeks(2));
-                } else if ($data == 'ultimo_mes') {
-                    $query->where('created_at', '>=', now()->subMonth());
-                } else if ($data == 'ultimo_bimestre') {
-                    $query->where('created_at', '>=', now()->subMonths(2));
-                } else if ($data == 'ultimo_semestre') {
-                    $query->where('created_at', '>=', now()->subMonths(6));
-                } else if ($data == 'ultimo_ano') {
-                    $query->where('created_at', '>=', now()->subYear());
-                }
-            }])
+            ])
             ->get()
             ->mapWithKeys(function ($categoria) {
                 return [$categoria->nome => $categoria->total_solicitacoes];

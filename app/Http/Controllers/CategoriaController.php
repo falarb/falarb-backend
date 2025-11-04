@@ -17,11 +17,18 @@ class CategoriaController extends Controller
 
         // Filtros
         $ativo = request()->query('ativo', null);
+        $termo_geral = request()->query('termo_geral', null);
 
         $query = Categoria::query();
 
         if (!is_null($ativo)) {
             $query->where('ativo', filter_var($ativo, FILTER_VALIDATE_BOOLEAN));
+        }
+
+        if (!is_null($termo_geral)) {
+            $query->where(function ($q) use ($termo_geral) {
+                $q->where('nome', 'like', '%' . $termo_geral . '%');
+            });
         }
 
         $total = $query->count();
@@ -57,14 +64,13 @@ class CategoriaController extends Controller
 
     public function atualizar(Request $request, $id)
     {
-        $user = $request->user();
-
         $dadosCategoria = $request->validate([
-            'nome' => 'required|string|max:255',
+            'nome' => 'sometimes|string|max:255',
+            'ativo' => 'sometimes|boolean',
         ]);
 
         $categoria = Categoria::findOrFail($id);
-        $categoria->update(array_merge($dadosCategoria, ['atualizado_por' => $user->id]));
+        $categoria->update($dadosCategoria);
 
         return response()->json($categoria, 200);
     }
@@ -72,6 +78,12 @@ class CategoriaController extends Controller
     public function excluir($id)
     {
         $categoria = Categoria::findOrFail($id);
+
+        $temSolicitacoes = $categoria->solicitacoes()->exists();
+        if ($temSolicitacoes) {
+            return response()->json(['message' => 'Não é possível excluir a categoria pois existem solicitações associadas a ela.'], 400);
+        }
+
         $categoria->update(['ativo' => false]);
         return response()->json(['message' => 'Categoria excluída com sucesso'], 200);
     }
